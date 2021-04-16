@@ -14,8 +14,6 @@ import java.util.Map;
 
 public class TaskActivity extends AppCompatActivity {
 
-    Task task = new Task();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,14 +22,17 @@ public class TaskActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         EditText content = findViewById(R.id.name);
-        String data = content.getText().toString();
+        String name = content.getText().toString();
         EditText content2 = findViewById(R.id.message);
         String disc = content2.getText().toString();
-        task.put(data, disc);
-        String mess = task.getTasks();
+        Task task = new Task(name, disc);
+
+        MainActivity.db.execSQL("INSERT INTO tasks VALUES ('"+task.getName()+"', '"+task.getDisc()+"', null, null);");
 
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(Task.class.getSimpleName(), mess);
-        startActivity(intent);
+        intent.putExtra("name", task.getName());
+        intent.putExtra("disc", task.getDisc());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
