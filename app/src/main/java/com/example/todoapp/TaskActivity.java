@@ -26,12 +26,10 @@ public class TaskActivity extends AppCompatActivity {
         EditText content2 = findViewById(R.id.message);
         String disc = content2.getText().toString();
         Task task = new Task(name, disc);
-
-        MainActivity.db.execSQL("INSERT INTO tasks VALUES ('"+task.getName()+"', '"+task.getDisc()+"', null, null);");
+        MainActivity.db.execSQL("INSERT INTO tasks (" + DatabaseHelper.COLUMN_NAME + ", "
+                + DatabaseHelper.COLUMN_DISC + ") VALUES ('" + task.getName() + "', '" + task.getDisc() + "');");
 
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("name", task.getName());
-        intent.putExtra("disc", task.getDisc());
         setResult(RESULT_OK, intent);
         finish();
     }

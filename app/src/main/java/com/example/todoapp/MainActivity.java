@@ -1,51 +1,45 @@
 package com.example.todoapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
+
+    ListView taskList;
+    DatabaseHelper databaseHelper;
     public static SQLiteDatabase db;
+    Cursor taskCursor;
+    SimpleCursorAdapter taskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db = getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS tasks (name TEXT, disc TEXT, alarm TEXT, pic BLOB)");
+
+        taskList = (ListView) findViewById(R.id.listView);
+        databaseHelper = new DatabaseHelper(getApplicationContext());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // получаем элемент ListView
-        ListView listView = findViewById(R.id.listView);
-
-        Cursor query = db.rawQuery("SELECT * FROM tasks;", null);
-
-
-        while(query.moveToNext()){
-            String nameToPrint = query.getString(0);
-            if (nameToPrint != null) {
-                // создаем адаптер
-                ArrayAdapter<String> adapter = new ArrayAdapter(this,
-                        android.R.layout.simple_list_item_1, Collections.singletonList(nameToPrint));
-                // устанавливаем для списка адаптер
-                listView.setAdapter(adapter);
-            }
-        }
-        query.close();
+        // открываем подключение
+        db = databaseHelper.getReadableDatabase();
+        //получаем данные из бд в виде курсора
+        taskCursor = db.rawQuery("select * from " + DatabaseHelper.TABLE, null);
+        // определяем, какие столбцы из курсора будут выводиться в ListView
+        String[] headers = new String[]{DatabaseHelper.COLUMN_NAME, DatabaseHelper.COLUMN_DISC};
+        // создаем адаптер, передаем в него курсор
+        taskAdapter = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item,
+                taskCursor, headers, new int[]{android.R.id.text1, android.R.id.text2}, 0);
+        taskList.setAdapter(taskAdapter);
     }
 
     public void onClick(View view) {
@@ -66,5 +60,4 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         db.close();
     }
-
 }
