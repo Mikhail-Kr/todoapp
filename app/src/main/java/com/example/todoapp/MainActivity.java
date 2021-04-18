@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         //получаем данные из бд в виде курсора
         taskCursor = db.rawQuery("select * from " + DatabaseHelper.TABLE, null);
         // определяем, какие столбцы из курсора будут выводиться в ListView
-        String[] headers = new String[]{DatabaseHelper.COLUMN_NAME, DatabaseHelper.COLUMN_DISC};
+        String[] headers = new String[]{DatabaseHelper.COLUMN_NAME, DatabaseHelper.COLUMN_PICS_PATH};
         // создаем адаптер, передаем в него курсор
         taskAdapter = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item,
                 taskCursor, headers, new int[]{android.R.id.text1, android.R.id.text2}, 0);
