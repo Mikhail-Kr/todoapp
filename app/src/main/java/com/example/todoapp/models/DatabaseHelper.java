@@ -1,4 +1,4 @@
-package com.example.todoapp;
+package com.example.todoapp.models;
 
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,4 +29,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,  int newVersion) {
     }
+    public static SQLiteDatabase db;
+    public static DatabaseHelper databaseHelper;
 }

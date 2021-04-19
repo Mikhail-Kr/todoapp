@@ -1,4 +1,4 @@
-package com.example.todoapp;
+package com.example.todoapp.models;
 
 import android.net.Uri;
 
@@ -12,7 +12,11 @@ public class Task implements Serializable {
     private final String picName;
 
     public Task(String name, String disc, Uri pic, String picName) {
-        this.name = name;
+        if (name.length() >= 20) {
+            throw new IllegalArgumentException();
+        } else {
+            this.name = name;
+        }
         this.disc = disc;
         this.picPath = pic;
         this.picName = picName;

@@ -1,4 +1,4 @@
-package com.example.todoapp;
+package com.example.todoapp.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
@@ -10,11 +10,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import com.example.todoapp.models.DatabaseHelper;
+import com.example.todoapp.R;
+
 public class MainActivity extends AppCompatActivity {
 
     ListView taskList;
-    DatabaseHelper databaseHelper;
-    public static SQLiteDatabase db;
+
     Cursor taskCursor;
     SimpleCursorAdapter taskAdapter;
 
@@ -24,14 +26,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //taskList = (ListView) findViewById(R.id.listView);
-        databaseHelper = new DatabaseHelper(getApplicationContext());
+        DatabaseHelper.databaseHelper = new DatabaseHelper(getApplicationContext());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         // открываем подключение
-        db = databaseHelper.getReadableDatabase();
+        DatabaseHelper.db = DatabaseHelper.databaseHelper.getReadableDatabase();
 /*        //получаем данные из бд в виде курсора
         taskCursor = db.rawQuery("select * from " + DatabaseHelper.TABLE, null);
         // определяем, какие столбцы из курсора будут выводиться в ListView
@@ -58,6 +60,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-     //   db.close();
+        DatabaseHelper.db.close();
     }
 }

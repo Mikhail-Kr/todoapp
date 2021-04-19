@@ -1,4 +1,4 @@
-package com.example.todoapp;
+package com.example.todoapp.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -20,6 +20,10 @@ import java.nio.charset.Charset;
 import java.util.Random;
 
 import android.widget.Toast;
+
+import com.example.todoapp.models.DatabaseHelper;
+import com.example.todoapp.R;
+import com.example.todoapp.models.Task;
 
 public class TaskActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
@@ -45,10 +49,10 @@ public class TaskActivity extends AppCompatActivity {
         Uri picPath = selectedImage;
         String picName = photoFileName;
         Task task = new Task(name, disc, picPath, picName);
-        MainActivity.db.execSQL("INSERT INTO tasks (" + DatabaseHelper.COLUMN_NAME + ", "
+        DatabaseHelper.db.execSQL("INSERT INTO tasks (" + DatabaseHelper.COLUMN_NAME + ", "
                 + DatabaseHelper.COLUMN_DISC + " , " + DatabaseHelper.COLUMN_PICS_PATH + " , "
                 + DatabaseHelper.COLUMN_PICS_NAME + ") VALUES ('" + task.getName() + "', '"
-                + task.getDisc() + "', '" + task.getPicPath()+ "', '"+ task.getPicName() +"'   );");
+                + task.getDisc() + "', '" + task.getPicPath().getPath() + "', '"+ task.getPicName() +"' );");
 
         Intent intent = new Intent(this, MainActivity.class);
         setResult(RESULT_OK, intent);
@@ -70,9 +74,9 @@ public class TaskActivity extends AppCompatActivity {
         // required for API >= 24
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
         Uri fileProvider = FileProvider.getUriForFile(this, "com.example.todoapp", photoFile);
+        selectedImage = fileProvider;
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
         // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -149,13 +153,6 @@ public class TaskActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    //Return Uri from Image
-/*    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }*/
 
     public String RandomString() {
         byte[] array = new byte[7]; // length is bounded by 7

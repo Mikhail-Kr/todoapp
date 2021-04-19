@@ -1,4 +1,4 @@
-package com.example.todoapp;
+package com.example.todoapp.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,26 +9,29 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.todoapp.R;
+import com.example.todoapp.models.Task;
+
 import java.util.List;
 
-public class rViewAdapter extends RecyclerView.Adapter<rViewAdapter.ViewHolder>{
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
 
     private final LayoutInflater inflater;
     private final List<Task> tasks;
 
-    rViewAdapter(Context context, List<Task> task) {
+    TaskAdapter(Context context, List<Task> task) {
         this.tasks = task;
         this.inflater = LayoutInflater.from(context);
     }
     @Override
-    public rViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TaskAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = inflater.inflate(R.layout.list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(rViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(TaskAdapter.ViewHolder holder, int position) {
         Task task = tasks.get(position);
         holder.picView.setImageURI(task.getPicPath());
         holder.nameView.setText(task.getName());
