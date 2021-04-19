@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE tasks (" + COLUMN_ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_NAME
                 + " TEXT," + COLUMN_DISC + " TEXT," + COLUMN_PICS_PATH
-                + " TEXT," + COLUMN_PICS_NAME + "TEXT);");
+                + " TEXT," + COLUMN_PICS_NAME + " TEXT);");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,  int newVersion) {

@@ -1,28 +1,34 @@
 package com.example.todoapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 
-import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.nio.charset.Charset;
+import java.util.Random;
+
+import android.widget.Toast;
 
 public class TaskActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
-    private static final int REQUEST_TAKE_PHOTO = 11;
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public final String APP_TAG = "ToDoApp";
+    public String photoFileName = RandomString();
+    Uri selectedImage;
+    File photoFile;
+    String currentPhotoPath;
 
 
     @Override
@@ -36,55 +42,127 @@ public class TaskActivity extends AppCompatActivity {
         String name = content.getText().toString();
         EditText content2 = findViewById(R.id.message);
         String disc = content2.getText().toString();
-        Task task = new Task(name, disc);
+        Uri picPath = selectedImage;
+        String picName = photoFileName;
+        Task task = new Task(name, disc, picPath, picName);
         MainActivity.db.execSQL("INSERT INTO tasks (" + DatabaseHelper.COLUMN_NAME + ", "
-                + DatabaseHelper.COLUMN_DISC + ") VALUES ('" + task.getName() + "', '" + task.getDisc() + "');");
+                + DatabaseHelper.COLUMN_DISC + " , " + DatabaseHelper.COLUMN_PICS_PATH + " , "
+                + DatabaseHelper.COLUMN_PICS_NAME + ") VALUES ('" + task.getName() + "', '"
+                + task.getDisc() + "', '" + task.getPicPath()+ "', '"+ task.getPicName() +"'   );");
 
         Intent intent = new Intent(this, MainActivity.class);
         setResult(RESULT_OK, intent);
         finish();
     }
 
-    public void onClick_Image (View view) {
+    public void onClick_Image(View view) {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
     }
 
     public void onClick_Cam(View view) {
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try{
-            startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
-        }catch (ActivityNotFoundException e){
-            e.printStackTrace();
+        // create Intent to take a picture and return control to the calling application
+
+        // Create a File reference for future access
+        photoFile = getPhotoFileUri(photoFileName);
+
+        // wrap File object into a content provider
+        // required for API >= 24
+        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+        Uri fileProvider = FileProvider.getUriForFile(this, "com.example.todoapp", photoFile);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
 
     @Override
-    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ImageView imageView = findViewById(R.id.imageView2);
-        if (resultCode == RESULT_OK && data != null) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case RESULT_LOAD_IMAGE:
-                    Uri selectedImage = data.getData();
+                    selectedImage = data.getData();
                     imageView.setImageURI(selectedImage);
                     break;
-                case REQUEST_TAKE_PHOTO:
-                    // Фотка сделана, извлекаем миниатюру картинки
-                    Bundle extras = data.getExtras();
-                    Bitmap thumbnailBitmap = (Bitmap) extras.get("data");
-                    imageView.setImageBitmap(thumbnailBitmap);
+                case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
+                    // by this point we have the camera photo on disk
+                    Bitmap takenImage = setPic(photoFile, imageView);
+                    // RESIZE BITMAP, see section below
+                    // Load the taken image into a preview
+                    imageView.setImageBitmap(takenImage);
             }
-
+        } else { // Result was a failure
+            Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
         }
+
     }
 
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
+    // Returns the File for a photo stored on disk given the fileName
+    public File getPhotoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+            Log.d(APP_TAG, "failed to create directory");
+        }
+
+        // Return the file target for the photo based on filename
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+
+        return file;
+    }
+
+    private Bitmap setPic(File photoFile, ImageView imageView) {
+        // Get the dimensions of the View
+        int targetW = imageView.getWidth();
+        int targetH = imageView.getHeight();
+        currentPhotoPath = photoFile.getAbsolutePath();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        return bitmap;
+    }
+
+    //Return Uri from Image
+/*    public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
+    }*/
+
+    public String RandomString() {
+        byte[] array = new byte[7]; // length is bounded by 7
+        new Random().nextBytes(array);
+        String generatedString = new String(array, Charset.forName("UTF-8"));
+
+        System.out.println(generatedString);
+        return generatedString;
     }
-
-
 }

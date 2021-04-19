@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        taskList = (ListView) findViewById(R.id.listView);
+        //taskList = (ListView) findViewById(R.id.listView);
         databaseHelper = new DatabaseHelper(getApplicationContext());
     }
 
@@ -32,14 +32,14 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // открываем подключение
         db = databaseHelper.getReadableDatabase();
-        //получаем данные из бд в виде курсора
+/*        //получаем данные из бд в виде курсора
         taskCursor = db.rawQuery("select * from " + DatabaseHelper.TABLE, null);
         // определяем, какие столбцы из курсора будут выводиться в ListView
         String[] headers = new String[]{DatabaseHelper.COLUMN_NAME, DatabaseHelper.COLUMN_PICS_PATH};
         // создаем адаптер, передаем в него курсор
         taskAdapter = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item,
                 taskCursor, headers, new int[]{android.R.id.text1, android.R.id.text2}, 0);
-        taskList.setAdapter(taskAdapter);
+        taskList.setAdapter(taskAdapter);*/
     }
 
     public void onClick(View view) {
@@ -58,6 +58,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        db.close();
+     //   db.close();
     }
 }
