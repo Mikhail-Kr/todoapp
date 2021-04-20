@@ -39,6 +39,7 @@ public class TaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
+        ImageView aaa = findViewById(R.id.imageView);
     }
 
     public void onClick(View view) {
@@ -52,7 +53,7 @@ public class TaskActivity extends AppCompatActivity {
         DatabaseHelper.db.execSQL("INSERT INTO tasks (" + DatabaseHelper.COLUMN_NAME + ", "
                 + DatabaseHelper.COLUMN_DISC + " , " + DatabaseHelper.COLUMN_PICS_PATH + " , "
                 + DatabaseHelper.COLUMN_PICS_NAME + ") VALUES ('" + task.getName() + "', '"
-                + task.getDisc() + "', '" + task.getPicPath().getPath() + "', '"+ task.getPicName() +"' );");
+                + task.getDisc() + "', '" + task.getPicPath() + "', '"+ task.getPicName() +"' );");
 
         Intent intent = new Intent(this, MainActivity.class);
         setResult(RESULT_OK, intent);
@@ -95,12 +96,14 @@ public class TaskActivity extends AppCompatActivity {
                     selectedImage = data.getData();
                     imageView.setImageURI(selectedImage);
                     break;
+
                 case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
                     // by this point we have the camera photo on disk
                     Bitmap takenImage = setPic(photoFile, imageView);
                     // RESIZE BITMAP, see section below
                     // Load the taken image into a preview
                     imageView.setImageBitmap(takenImage);
+                    break;
             }
         } else { // Result was a failure
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
@@ -160,6 +163,6 @@ public class TaskActivity extends AppCompatActivity {
         String generatedString = new String(array, Charset.forName("UTF-8"));
 
         System.out.println(generatedString);
-        return generatedString;
+        return generatedString.concat(".jpg");
     }
 }

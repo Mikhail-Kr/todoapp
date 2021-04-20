@@ -1,6 +1,8 @@
 package com.example.todoapp.views;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
+import com.example.todoapp.models.Pictures;
 import com.example.todoapp.models.Task;
 
 import java.util.List;

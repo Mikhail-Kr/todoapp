@@ -17,7 +17,12 @@ public class Task implements Serializable {
         } else {
             this.name = name;
         }
-        this.disc = disc;
+
+        if (name.length() >= 20) {
+            throw new IllegalArgumentException();
+        } else {
+            this.disc = disc;
+        }
         this.picPath = pic;
         this.picName = picName;
     }
