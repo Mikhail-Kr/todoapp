@@ -23,14 +23,12 @@ public class MainActivity extends AppCompatActivity {
     ListView taskList;
     Cursor taskCursor;
     SimpleCursorAdapter taskAdapter;
-    ArrayList<Task> tasks= new ArrayList<>();
     String[] data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //taskList = (ListView) findViewById(R.id.listView);
         DatabaseHelper.databaseHelper = new DatabaseHelper(getApplicationContext());
     }
 
@@ -38,12 +36,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // открываем подключение
+        ArrayList<Task> tasks= new ArrayList<>();
         DatabaseHelper.db = DatabaseHelper.databaseHelper.getReadableDatabase();
         //получаем данные из бд в виде курсора
         taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE ,  data);
         if (taskCursor != null) {
             while (taskCursor.moveToNext()) {
-                tasks.add(new Task(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME)),
+                tasks.add(new Task(
+                        taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME)),
                         taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_DISC)),
                         Uri.parse(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_PICS_PATH))),
                         taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_PICS_NAME))));

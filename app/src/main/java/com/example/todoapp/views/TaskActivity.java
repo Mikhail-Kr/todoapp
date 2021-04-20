@@ -39,7 +39,6 @@ public class TaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
-        ImageView aaa = findViewById(R.id.imageView);
     }
 
     public void onClick(View view) {
@@ -89,7 +88,7 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ImageView imageView = findViewById(R.id.imageView2);
+        ImageView imageView = findViewById(R.id.printedPic);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case RESULT_LOAD_IMAGE:
