@@ -24,10 +24,8 @@ public class Pictures {
     public static Uri getUri(Context context, String photoFileName) {
         Uri selectedImage;
         // create Intent to take a picture and return control to the calling application
-
         // Create a File reference for future access
         File photoFile = getPhotoFileUri(context, photoFileName);
-
         // wrap File object into a content provider
         // required for API >= 24
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
@@ -44,24 +42,18 @@ public class Pictures {
         int targetW = imageView.getWidth();
         int targetH = imageView.getHeight();
         currentPhotoPath = photoFile.getAbsolutePath();
-
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-
         BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
-
         // Determine how much to scale down the image
         int scaleFactor = Math.max(1, Math.min(photoW / targetW, photoH / targetH));
-
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
-
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
         return bitmap;
     }
@@ -73,37 +65,27 @@ public class Pictures {
         // Use `getExternalFilesDir` on Context to access package-specific directories.
         // This way, we don't need to request external read/write runtime permissions.
         File mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
-
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Log.d(APP_TAG, "failed to create directory");
         }
-
         // Return the file target for the photo based on filename
         File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
-
         return file;
     }
 
-    //Копирует изображение из галереи во внутреннюю память, возвращает Uri изображения-сохраненного
+    //Копирует изображение из галереи во внутреннюю память, возвращает Uri сохраненного изображения
     public static Uri copyImg(Context context, String photoFileName, Uri selectedImage) {
-        Uri copyImage;
-        String currentPhotoPath = null;
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        File photoFile = Pictures.getPhotoFileUri(context, photoFileName);
-        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-        currentPhotoPath = photoFile.getAbsolutePath();
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions); // I'll assume this is a Context and bitmap is a Bitmap
-
-        final int chunkSize = 1024;  // We'll read in one kB at a time
+        final int chunkSize = 1024;
         byte[] imageData = new byte[chunkSize];
+
+        Uri copyImage;
+        File photoFile = Pictures.getPhotoFileUri(context, photoFileName);
 
         try {
             InputStream in = context.getContentResolver().openInputStream(selectedImage);
             File photoFile1 = Pictures.getPhotoFileUri(context, photoFileName);
-            OutputStream out = new FileOutputStream(photoFile1);  // I'm assuming you already have the File object for where you're writing to
-
+            OutputStream out = new FileOutputStream(photoFile1);
             int bytesRead;
             while ((bytesRead = in.read(imageData)) > 0) {
                 out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)));

@@ -1,8 +1,6 @@
 package com.example.todoapp.views;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
-import com.example.todoapp.models.Pictures;
 import com.example.todoapp.models.Task;
 
 import java.util.List;
@@ -27,7 +24,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public TaskAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         return new ViewHolder(view);
     }
@@ -60,30 +56,20 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         @Override
         public void onClick(View view) {
             Toast.makeText(view.getContext(), "position = " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
-
             //go through each item if you have few items within recycler view
             if (getLayoutPosition() == 0) {
                 //Do whatever you want here
-
             } else if (getLayoutPosition() == 1) {
                 //Do whatever you want here
-
             } else if (getLayoutPosition() == 2) {
-
             } else if (getLayoutPosition() == 3) {
-
             } else if (getLayoutPosition() == 4) {
-
             } else if (getLayoutPosition() == 5) {
-
             }
-
             //or you can use For loop if you have long list of items. Use its length or size of the list as
-            for(int i = 0; i < tasks.size(); i++){
-
+            for (int i = 0; i < tasks.size(); i++) {
             }
         }
-
     }
 }
 

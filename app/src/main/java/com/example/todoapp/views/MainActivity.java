@@ -1,17 +1,13 @@
 package com.example.todoapp.views;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.R;
@@ -20,9 +16,7 @@ import com.example.todoapp.models.Task;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ListView taskList;
     Cursor taskCursor;
-    SimpleCursorAdapter taskAdapter;
     String[] data;
 
     @Override
@@ -36,10 +30,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // открываем подключение
-        ArrayList<Task> tasks= new ArrayList<>();
+        ArrayList<Task> tasks = new ArrayList<>();
         DatabaseHelper.db = DatabaseHelper.databaseHelper.getReadableDatabase();
         //получаем данные из бд в виде курсора
-        taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE ,  data);
+        taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE, data);
         if (taskCursor != null) {
             while (taskCursor.moveToNext()) {
                 tasks.add(new Task(

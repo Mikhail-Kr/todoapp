@@ -1,28 +1,17 @@
 package com.example.todoapp.views;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Random;
 
 import android.widget.Toast;
@@ -38,7 +27,6 @@ public class TaskActivity extends AppCompatActivity {
     public final String APP_TAG = "ToDoApp";
     public String photoFileName = RandomString();
     Uri selectedImage;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +79,6 @@ public class TaskActivity extends AppCompatActivity {
                     selectedImage = data.getData();
                     selectedImage = Pictures.copyImg(this, photoFileName, selectedImage);
                     imageView.setImageURI(selectedImage);
-
                     break;
 
                 case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
@@ -105,15 +92,12 @@ public class TaskActivity extends AppCompatActivity {
         } else { // Result was a failure
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     public String RandomString() {
         byte[] array = new byte[7]; // length is bounded by 7
         new Random().nextBytes(array);
         String generatedString = new String(array, Charset.forName("UTF-8"));
-
-        System.out.println(generatedString);
         return generatedString.concat(".jpg");
     }
 }
