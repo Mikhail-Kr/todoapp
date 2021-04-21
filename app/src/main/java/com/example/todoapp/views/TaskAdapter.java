@@ -19,7 +19,7 @@ import com.example.todoapp.models.Task;
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
-    private final List<Task> tasks;
+    private static List<Task> tasks;
 
     TaskAdapter(Context context, List<Task> task) {
         this.tasks = task;
@@ -76,12 +76,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
             } else if (getLayoutPosition() == 5) {
 
-            }/*
+            }
 
             //or you can use For loop if you have long list of items. Use its length or size of the list as
-            for(int i = 0; i < exampleList.size(); i++){
+            for(int i = 0; i < tasks.size(); i++){
 
-            }*/
+            }
         }
 
     }

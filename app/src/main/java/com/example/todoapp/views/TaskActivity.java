@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.R;
+import com.example.todoapp.models.Pictures;
 import com.example.todoapp.models.Task;
 
 public class TaskActivity extends AppCompatActivity {
@@ -31,8 +32,6 @@ public class TaskActivity extends AppCompatActivity {
     public final String APP_TAG = "ToDoApp";
     public String photoFileName = RandomString();
     Uri selectedImage;
-    File photoFile;
-    String currentPhotoPath;
 
 
     @Override
@@ -65,18 +64,9 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     public void onClick_Cam(View view) {
-        // create Intent to take a picture and return control to the calling application
-
-        // Create a File reference for future access
-        photoFile = getPhotoFileUri(photoFileName);
-
-        // wrap File object into a content provider
-        // required for API >= 24
-        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-        Uri fileProvider = FileProvider.getUriForFile(this, "com.example.todoapp", photoFile);
-        selectedImage = fileProvider;
+        selectedImage = Pictures.getUri(this, photoFileName);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImage);
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
         // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -98,7 +88,7 @@ public class TaskActivity extends AppCompatActivity {
 
                 case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
                     // by this point we have the camera photo on disk
-                    Bitmap takenImage = setPic(photoFile, imageView);
+                    Bitmap takenImage = Pictures.setPic(this, photoFileName, imageView);
                     // RESIZE BITMAP, see section below
                     // Load the taken image into a preview
                     imageView.setImageBitmap(takenImage);
@@ -109,52 +99,6 @@ public class TaskActivity extends AppCompatActivity {
         }
 
     }
-
-    // Returns the File for a photo stored on disk given the fileName
-    public File getPhotoFileUri(String fileName) {
-        // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
-        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-            Log.d(APP_TAG, "failed to create directory");
-        }
-
-        // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
-
-        return file;
-    }
-
-    private Bitmap setPic(File photoFile, ImageView imageView) {
-        // Get the dimensions of the View
-        int targetW = imageView.getWidth();
-        int targetH = imageView.getHeight();
-        currentPhotoPath = photoFile.getAbsolutePath();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-
-        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-        return bitmap;
-    }
-
 
     public String RandomString() {
         byte[] array = new byte[7]; // length is bounded by 7
