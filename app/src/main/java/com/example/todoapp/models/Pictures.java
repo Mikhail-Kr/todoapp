@@ -11,9 +11,16 @@ import android.widget.ImageView;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
 
 public class Pictures {
 
+    //Возвразает Uri изображения во внутренней памяти
     public static Uri getUri(Context context, String photoFileName) {
         Uri selectedImage;
         // create Intent to take a picture and return control to the calling application
@@ -29,6 +36,7 @@ public class Pictures {
         return selectedImage;
     }
 
+    //Отрисовывает изображение, по указанному имени, пути и размерам ImageView и возвращает его
     public static Bitmap setPic(Context context, String photoFileName, ImageView imageView) {
         String currentPhotoPath;
         File photoFile = getPhotoFileUri(context, photoFileName);
@@ -36,7 +44,6 @@ public class Pictures {
         int targetW = imageView.getWidth();
         int targetH = imageView.getHeight();
         currentPhotoPath = photoFile.getAbsolutePath();
-        Uri fileProvider = FileProvider.getUriForFile(context, "com.example.todoapp", photoFile);
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -48,7 +55,7 @@ public class Pictures {
         int photoH = bmOptions.outHeight;
 
         // Determine how much to scale down the image
-        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+        int scaleFactor = Math.max(1, Math.min(photoW / targetW, photoH / targetH));
 
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
@@ -78,5 +85,38 @@ public class Pictures {
         return file;
     }
 
+    //Копирует изображение из галереи во внутреннюю память, возвращает Uri изображения-сохраненного
+    public static Uri copyImg(Context context, String photoFileName, Uri selectedImage) {
+        Uri copyImage;
+        String currentPhotoPath = null;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        File photoFile = Pictures.getPhotoFileUri(context, photoFileName);
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        currentPhotoPath = photoFile.getAbsolutePath();
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions); // I'll assume this is a Context and bitmap is a Bitmap
 
+        final int chunkSize = 1024;  // We'll read in one kB at a time
+        byte[] imageData = new byte[chunkSize];
+
+        try {
+            InputStream in = context.getContentResolver().openInputStream(selectedImage);
+            File photoFile1 = Pictures.getPhotoFileUri(context, photoFileName);
+            OutputStream out = new FileOutputStream(photoFile1);  // I'm assuming you already have the File object for where you're writing to
+
+            int bytesRead;
+            while ((bytesRead = in.read(imageData)) > 0) {
+                out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)));
+            }
+            in.close();
+            out.close();
+        } catch (FileNotFoundException e) {
+            Log.e("Something went wrong.", String.valueOf(e));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Uri fileProvider = FileProvider.getUriForFile(context, "com.example.todoapp", photoFile);
+        copyImage = fileProvider;
+        return copyImage;
+    }
 }

@@ -16,7 +16,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Random;
 
 import android.widget.Toast;
@@ -83,7 +89,9 @@ public class TaskActivity extends AppCompatActivity {
             switch (requestCode) {
                 case RESULT_LOAD_IMAGE:
                     selectedImage = data.getData();
+                    selectedImage = Pictures.copyImg(this, photoFileName, selectedImage);
                     imageView.setImageURI(selectedImage);
+
                     break;
 
                 case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
