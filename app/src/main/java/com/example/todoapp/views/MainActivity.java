@@ -1,10 +1,12 @@
 package com.example.todoapp.views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -12,10 +14,15 @@ import android.widget.EditText;
 
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.R;
+import com.example.todoapp.models.Task;
 import com.example.todoapp.models.TaskList;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     TaskList tasklist;
+    Cursor taskCursor;
+    String[] data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +33,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // открываем подключение
+        ArrayList<TaskList> tasks = new ArrayList<>();
+        //DatabaseHelper.db = DatabaseHelper.databaseHelper.getReadableDatabase();
+        //получаем данные из бд в виде курсора
+        taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE_LIST, data);
+        if (taskCursor != null) {
+            while (taskCursor.moveToNext()) {
+                tasks.add(new TaskList(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME))));
+                RecyclerView recyclerView = findViewById(R.id.tasks_list);
+                TaskListAdapter taskListAdapter = new TaskListAdapter(this, tasks);
+                recyclerView.setAdapter(taskListAdapter);
+                taskListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         //DatabaseHelper.db.close();
     }
 
+    //Отрисовка диалога
     public void onClickTaskList(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Имя списка задач");
@@ -43,10 +70,26 @@ public class MainActivity extends AppCompatActivity {
 
 // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            //Сохранение введенного текста в диалог, отображение изменений
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 tasklist = new TaskList(input.getText().toString());
                 DatabaseHelper.db.execSQL("INSERT INTO taskList (" + DatabaseHelper.COLUMN_NAME + ") VALUES ('" + tasklist.getName() + "');");
+                // открываем подключение
+                ArrayList<TaskList> tasks = new ArrayList<>();
+                //DatabaseHelper.db = DatabaseHelper.databaseHelper.getReadableDatabase();
+                //получаем данные из бд в виде курсора
+                taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE_LIST, data);
+                if (taskCursor != null) {
+                    while (taskCursor.moveToNext()) {
+                        tasks.add(new TaskList(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME))));
+                        RecyclerView recyclerView = findViewById(R.id.tasks_list);
+                        TaskListAdapter taskListAdapter = new TaskListAdapter(MainActivity.this, tasks);
+                        recyclerView.setAdapter(taskListAdapter);
+                        taskListAdapter.notifyDataSetChanged();
+                    }
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -58,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    //Переход к списку задач
     public void onClickToTaskList(View view) {
         Intent intent = new Intent(this, TaskListActivity.class);
         startActivityForResult(intent, 1);
