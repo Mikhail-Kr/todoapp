@@ -24,7 +24,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public TaskAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_list_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -49,7 +49,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             super(view);
             view.setOnClickListener(this);
             picView = view.findViewById(R.id.pic);
-            nameView = view.findViewById(R.id.name);
+            nameView = view.findViewById(R.id.name_list);
             discView = view.findViewById(R.id.disc);
         }
 

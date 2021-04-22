@@ -1,55 +1,65 @@
 package com.example.todoapp.views;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.R;
-import com.example.todoapp.models.Task;
-
-import java.util.ArrayList;
+import com.example.todoapp.models.TaskList;
 
 public class MainActivity extends AppCompatActivity {
-    Cursor taskCursor;
-    String[] data;
+    TaskList tasklist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DatabaseHelper.databaseHelper = new DatabaseHelper(getApplicationContext());
+        DatabaseHelper.db = DatabaseHelper.databaseHelper.getReadableDatabase();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // открываем подключение
-        ArrayList<Task> tasks = new ArrayList<>();
-        DatabaseHelper.db = DatabaseHelper.databaseHelper.getReadableDatabase();
-        //получаем данные из бд в виде курсора
-        taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE, data);
-        if (taskCursor != null) {
-            while (taskCursor.moveToNext()) {
-                tasks.add(new Task(
-                        taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME)),
-                        taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_DISC)),
-                        Uri.parse(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_PICS_PATH))),
-                        taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_PICS_NAME))));
-                RecyclerView recyclerView = findViewById(R.id.list);
-                TaskAdapter taskAdapter = new TaskAdapter(this, tasks);
-                recyclerView.setAdapter(taskAdapter);
-            }
-        }
+    protected void onDestroy() {
+        super.onDestroy();
+        //DatabaseHelper.db.close();
     }
 
-    public void onClick(View view) {
-        Intent intent = new Intent(this, TaskActivity.class);
+    public void onClickTaskList(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Имя списка задач");
+
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                tasklist = new TaskList(input.getText().toString());
+                DatabaseHelper.db.execSQL("INSERT INTO taskList (" + DatabaseHelper.COLUMN_NAME + ") VALUES ('" + tasklist.getName() + "');");
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+
+    public void onClickToTaskList(View view) {
+        Intent intent = new Intent(this, TaskListActivity.class);
         startActivityForResult(intent, 1);
     }
 
@@ -59,11 +69,5 @@ public class MainActivity extends AppCompatActivity {
         if (data == null) {
             return;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        DatabaseHelper.db.close();
     }
 }

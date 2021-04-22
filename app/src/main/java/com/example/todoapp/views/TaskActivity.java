@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 import android.widget.Toast;
@@ -35,7 +35,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        EditText content = findViewById(R.id.name);
+        EditText content = findViewById(R.id.name_list);
         String name = content.getText().toString();
         EditText content2 = findViewById(R.id.message);
         String disc = content2.getText().toString();
@@ -47,7 +47,8 @@ public class TaskActivity extends AppCompatActivity {
                 + DatabaseHelper.COLUMN_PICS_NAME + ") VALUES ('" + task.getName() + "', '"
                 + task.getDisc() + "', '" + task.getPicPath() + "', '"+ task.getPicName() +"' );");
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, TaskListActivity.class);
+        startActivity(intent);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -97,7 +98,7 @@ public class TaskActivity extends AppCompatActivity {
     public String RandomString() {
         byte[] array = new byte[7]; // length is bounded by 7
         new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
+        String generatedString = new String(array, StandardCharsets.UTF_8);
         return generatedString.concat(".jpg");
     }
 }
