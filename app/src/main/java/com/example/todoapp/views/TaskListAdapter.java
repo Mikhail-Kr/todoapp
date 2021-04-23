@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,10 +48,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
         ViewHolder(View view) {
             super(view);
-            CheckedTextView ct = (CheckedTextView)itemView.findViewById(R.id.name_list);
+            CheckedTextView ct = itemView.findViewById(R.id.list_name);
             ct.setOnClickListener(this);
             picView = view.findViewById(R.id.pic);
-            nameView = view.findViewById(R.id.name_list);
+            nameView = view.findViewById(R.id.list_name);
             discView = view.findViewById(R.id.disc);
         }
 

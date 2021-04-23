@@ -10,18 +10,18 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/name_list"
+        app:layout_constraintRight_toLeftOf="@+id/list_name"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <CheckedTextView
-        android:id="@+id/name_list"
+        android:id="@+id/list_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:text="Заголовок"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:checked="false"
+        android:text="Заголовок"
         app:layout_constraintBottom_toTopOf="@+id/disc"
         app:layout_constraintLeft_toRightOf="@+id/pic"
         app:layout_constraintRight_toRightOf="parent"
@@ -35,7 +35,7 @@
         android:text="Описание"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/pic"
-        app:layout_constraintTop_toBottomOf="@+id/name_list"
+        app:layout_constraintTop_toBottomOf="@+id/list_name"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

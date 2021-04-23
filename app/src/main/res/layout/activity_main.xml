@@ -20,31 +20,57 @@
         android:onClick="onClickTaskList"
         android:text="Создать список задач" />
 
+
     <Button
         android:id="@+id/toTaskList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="303dp"
-        android:layout_marginBottom="107dp"
+        android:layout_marginRight="184dp"
+        android:layout_marginBottom="24dp"
         android:clickable="true"
         android:onClick="onClickToTaskList"
         android:text="Задачи" />
 
+    <Button
+        android:id="@+id/planned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="24dp"
+        android:text="Запланировано" />
+
+    <Button
+        android:id="@+id/add_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="70dp"
+        android:onClick="onClickToAddTask"
+        android:text="Создать задачу" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasks_list"
-        android:layout_width="375dp"
-        android:layout_height="687dp"
+        android:layout_width="wrap_content"
+        android:layout_height="542dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="17dp"
+        android:layout_marginBottom="190dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.recyclerview.widget.RecyclerView>
+
 
 </RelativeLayout>

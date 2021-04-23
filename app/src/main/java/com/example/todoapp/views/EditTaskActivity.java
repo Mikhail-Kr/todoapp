@@ -40,7 +40,7 @@ public class EditTaskActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        EditText content = findViewById(R.id.name_list);
+        EditText content = findViewById(R.id.list_name);
         String name = content.getText().toString();
         EditText content2 = findViewById(R.id.message);
         String disc = content2.getText().toString();

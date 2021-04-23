@@ -45,19 +45,6 @@ public class TaskListActivity extends AppCompatActivity {
                 recyclerView.setAdapter(taskListAdapter);
             }
         }
-
-/*        final CheckedTextView textView = findViewById(R.id.name_list);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                if (textView.isChecked()) {
-                    textView.setChecked(false);
-                    textView.setCheckMarkDrawable(android.R.drawable.checkbox_off_background);
-                } else {
-                    textView.setChecked(true);
-                    textView.setCheckMarkDrawable(android.R.drawable.checkbox_on_background);
-                }
-            }
-        });*/
     }
 
     @Override

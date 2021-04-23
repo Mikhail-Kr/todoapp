@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/name_list"
+        android:id="@+id/list_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Например, выйти на пробежку"
@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_list" />
+        app:layout_constraintTop_toBottomOf="@+id/list_name" />
 
     <Button
         android:id="@+id/button"
