@@ -14,7 +14,6 @@ import android.widget.EditText;
 
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.R;
-import com.example.todoapp.models.Task;
 import com.example.todoapp.models.TaskList;
 
 import java.util.ArrayList;
@@ -44,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
             while (taskCursor.moveToNext()) {
                 tasks.add(DatabaseHelper.addTaskList(taskCursor));
                 RecyclerView recyclerView = findViewById(R.id.tasks_list);
-                TaskListAdapter taskListAdapter = new TaskListAdapter(this, tasks);
-                recyclerView.setAdapter(taskListAdapter);
-                taskListAdapter.notifyDataSetChanged();
+                TasksListAdapter tasksListAdapter = new TasksListAdapter(this, tasks);
+                recyclerView.setAdapter(tasksListAdapter);
+                tasksListAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -85,9 +84,9 @@ public class MainActivity extends AppCompatActivity {
                     while (taskCursor.moveToNext()) {
                         tasks.add(DatabaseHelper.addTaskList(taskCursor));
                         RecyclerView recyclerView = findViewById(R.id.tasks_list);
-                        TaskListAdapter taskListAdapter = new TaskListAdapter(MainActivity.this, tasks);
-                        recyclerView.setAdapter(taskListAdapter);
-                        taskListAdapter.notifyDataSetChanged();
+                        TasksListAdapter tasksListAdapter = new TasksListAdapter(MainActivity.this, tasks);
+                        recyclerView.setAdapter(tasksListAdapter);
+                        tasksListAdapter.notifyDataSetChanged();
                     }
                 }
             }

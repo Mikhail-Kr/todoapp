@@ -4,53 +4,47 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
-import com.example.todoapp.models.Task;
+import com.example.todoapp.models.Step;
 
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
-    private static List<Task> tasks;
+public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
+    private static List<Step> steps;
 
-    TaskAdapter(Context context, List<Task> task) {
-        this.tasks = task;
+    StepAdapter(Context context, List<Step> step) {
+        this.steps = step;
     }
 
     @Override
-    public TaskAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_list_item, parent, false);
-        return new ViewHolder(view);
+    public StepAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.step_list_item, parent, false);
+        return new StepAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(TaskAdapter.ViewHolder holder, int position) {
-        Task task = tasks.get(position);
-        holder.picView.setImageURI(task.getPicPath());
-        holder.nameView.setText(task.getName());
-        holder.discView.setText(task.getDisc());
+    public void onBindViewHolder(StepAdapter.ViewHolder holder, int position) {
+        Step step = steps.get(position);
+        holder.stepView.setText(step.getStep());
     }
 
     @Override
     public int getItemCount() {
-        return tasks.size();
+        return steps.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final ImageView picView;
-        final TextView nameView, discView;
+        final TextView stepView;
 
         ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            picView = view.findViewById(R.id.pic);
-            nameView = view.findViewById(R.id.name_list);
-            discView = view.findViewById(R.id.disc);
+            stepView = view.findViewById(R.id.step_list);
         }
 
         @Override
@@ -67,9 +61,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             } else if (getLayoutPosition() == 5) {
             }
             //or you can use For loop if you have long list of items. Use its length or size of the list as
-            for (int i = 0; i < tasks.size(); i++) {
+            for (int i = 0; i < steps.size(); i++) {
             }
         }
     }
 }
-

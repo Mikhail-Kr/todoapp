@@ -41,16 +41,30 @@ public class TaskListActivity extends AppCompatActivity {
             while (taskCursor.moveToNext()) {
                 tasks.add(DatabaseHelper.addTask(taskCursor));
                 RecyclerView recyclerView = findViewById(R.id.list);
-                TaskAdapter taskAdapter = new TaskAdapter(this, tasks);
-                recyclerView.setAdapter(taskAdapter);
+                TaskListAdapter taskListAdapter = new TaskListAdapter(this, tasks);
+                recyclerView.setAdapter(taskListAdapter);
             }
         }
+
+/*        final CheckedTextView textView = findViewById(R.id.name_list);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if (textView.isChecked()) {
+                    textView.setChecked(false);
+                    textView.setCheckMarkDrawable(android.R.drawable.checkbox_off_background);
+                } else {
+                    textView.setChecked(true);
+                    textView.setCheckMarkDrawable(android.R.drawable.checkbox_on_background);
+                }
+            }
+        });*/
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); startActivity(intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         return true;
     }
 

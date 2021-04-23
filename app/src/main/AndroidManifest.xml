@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoApp">
-        <activity android:name=".views.TaskListActivity"></activity>
+        <activity android:name=".views.TaskActivity"></activity>
+        <activity android:name=".views.TaskListActivity" />
 
         <meta-data
             android:name="com.google.android.actions"
