@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE_LIST, data);
         if (taskCursor != null) {
             while (taskCursor.moveToNext()) {
-                tasks.add(new TaskList(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME))));
+                tasks.add(DatabaseHelper.addTaskList(taskCursor));
                 RecyclerView recyclerView = findViewById(R.id.tasks_list);
                 TaskListAdapter taskListAdapter = new TaskListAdapter(this, tasks);
                 recyclerView.setAdapter(taskListAdapter);
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE_LIST, data);
                 if (taskCursor != null) {
                     while (taskCursor.moveToNext()) {
-                        tasks.add(new TaskList(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME))));
+                        tasks.add(DatabaseHelper.addTaskList(taskCursor));
                         RecyclerView recyclerView = findViewById(R.id.tasks_list);
                         TaskListAdapter taskListAdapter = new TaskListAdapter(MainActivity.this, tasks);
                         recyclerView.setAdapter(taskListAdapter);

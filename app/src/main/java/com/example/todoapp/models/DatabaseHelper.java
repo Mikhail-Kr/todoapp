@@ -48,7 +48,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_PICS_NAME)));
     }
 
-    public static void addTaskList (String name) {
+    public static TaskList addTaskList (Cursor taskCursor) {
+        return new TaskList (taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME)));
 
     }
 

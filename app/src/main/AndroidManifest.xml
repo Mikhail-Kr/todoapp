@@ -30,7 +30,7 @@
         </provider>
 
         <activity
-            android:name=".views.TaskActivity"
+            android:name=".views.EditTaskActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity

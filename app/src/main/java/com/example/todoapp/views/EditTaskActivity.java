@@ -21,7 +21,7 @@ import com.example.todoapp.R;
 import com.example.todoapp.models.Pictures;
 import com.example.todoapp.models.Task;
 
-public class TaskActivity extends AppCompatActivity {
+public class EditTaskActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public final String APP_TAG = "ToDoApp";
@@ -31,7 +31,7 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task);
+        setContentView(R.layout.activity_edit_task);
     }
 
     public void onClick(View view) {

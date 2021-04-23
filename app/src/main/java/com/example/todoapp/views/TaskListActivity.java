@@ -49,17 +49,13 @@ public class TaskListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); startActivity(intent);
+        return true;
     }
 
     public void onClick(View view) {
-        Intent intent = new Intent(this, TaskActivity.class);
+        Intent intent = new Intent(this, EditTaskActivity.class);
         startActivityForResult(intent, 1);
     }
 
