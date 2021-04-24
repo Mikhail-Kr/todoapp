@@ -97,7 +97,7 @@
         app:layout_constraintTop_toBottomOf="@+id/message" />
 
     <TextView
-        android:id="@+id/textView_TaksList"
+        android:id="@+id/textView_taksList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Выберете список задач"
@@ -126,25 +126,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".views.MainActivity">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/stepslist"
+        android:layout_width="153dp"
+        android:layout_height="200dp"
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="178dp"
-            android:layout_height="305dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="229dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="12dp"
-            tools:layout_editor_absoluteX="256dp"
-            tools:layout_editor_absoluteY="585dp" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
-    </RelativeLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.891"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.781" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

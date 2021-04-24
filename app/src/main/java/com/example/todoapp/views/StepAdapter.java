@@ -1,10 +1,11 @@
 package com.example.todoapp.views;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,19 +14,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.todoapp.R;
 import com.example.todoapp.models.Step;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     private static List<Step> steps;
 
-    StepAdapter(Context context, List<Step> step) {
-        this.steps = step;
+    public StepAdapter(Context context, List<Step> steps) {
+        this.steps = steps;
     }
 
     @Override
     public StepAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.step_list_item, parent, false);
-        return new StepAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -40,11 +43,19 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView stepView;
+        final CheckedTextView stepView;
+        final TextView delText;
 
         ViewHolder(View view) {
             super(view);
-            stepView = view.findViewById(R.id.step_list);
+            stepView = view.findViewById(R.id.title_step);
+            delText = view.findViewById(R.id.delText);
+            delText.setOnClickListener(v -> {
+                Toast.makeText(view.getContext(), stepView.getText().toString(), Toast.LENGTH_SHORT).show();;
+            });
+            stepView.setOnClickListener(v -> {
+                stepView.toggle();
+            });
         }
     }
 }

@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.todoapp.dbClasses.StepDbMethods;
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.R;
 import com.example.todoapp.dbClasses.TaskListsDbMethods;
@@ -56,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 tasklist = new TaskList(input.getText().toString());
-                DatabaseHelper.db.execSQL("INSERT INTO taskLists (" + DatabaseHelper.COLUMN_NAME + ") VALUES ('" + tasklist.getName() + "');");
+                DatabaseHelper.db.execSQL("INSERT INTO taskLists (" + DatabaseHelper.COLUMN_NAME + ") VALUES ('"
+                        + tasklist.getName() + "');");
                 TaskListsDbMethods.showTaskLists(MainActivity.this, MainActivity.this);
             }
         });

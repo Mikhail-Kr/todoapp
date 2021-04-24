@@ -1,6 +1,7 @@
 package com.example.todoapp.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,11 @@ import java.util.List;
 
 public class TaskListsAdapter extends RecyclerView.Adapter<TaskListsAdapter.ViewHolder> {
     private static List<TaskList> taskList;
+    private static Context context1;
 
     public TaskListsAdapter(Context context, List<TaskList> taskList) {
         this.taskList = taskList;
+        context1 = context;
     }
 
     @Override
@@ -46,7 +49,8 @@ public class TaskListsAdapter extends RecyclerView.Adapter<TaskListsAdapter.View
             super(view);
             nameView = view.findViewById(R.id.title);
             nameView.setOnClickListener(v -> {
-                Toast.makeText(view.getContext(), nameView.getText().toString(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context1, TaskActivity.class);
+                context1.startActivity(intent);
             });
         }
     }

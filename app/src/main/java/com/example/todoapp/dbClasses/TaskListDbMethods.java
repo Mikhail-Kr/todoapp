@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.todoapp.R;
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.models.Task;
+import com.example.todoapp.models.TaskList;
 import com.example.todoapp.views.TaskListAdapter;
 
 import java.util.ArrayList;

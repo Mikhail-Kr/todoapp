@@ -3,11 +3,14 @@ package com.example.todoapp.views;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,9 +26,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.todoapp.dbClasses.EditTaskDbMethods;
+import com.example.todoapp.dbClasses.StepDbMethods;
 import com.example.todoapp.dbClasses.TaskListsDbMethods;
 import com.example.todoapp.R;
+import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.models.Pictures;
+import com.example.todoapp.models.Step;
 import com.example.todoapp.models.Task;
 import com.example.todoapp.models.TaskList;
 
@@ -37,6 +43,7 @@ public class EditTaskActivity extends AppCompatActivity {
     String[] lists = TaskListsDbMethods.selectTaskListsName();
     String item;
     ArrayList<TaskList> taskList = TaskListsDbMethods.select();
+    Step step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,8 @@ public class EditTaskActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Получаем выбранный объект
                 item = (String) parent.getItemAtPosition(position);
+
+                StepDbMethods.showStepLists(EditTaskActivity.this, EditTaskActivity.this);
             }
 
             @Override
@@ -63,6 +72,12 @@ public class EditTaskActivity extends AppCompatActivity {
             }
         };
         spinner.setOnItemSelectedListener(itemSelectedListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StepDbMethods.showStepLists(this, this);
     }
 
     public void onClick(View view) {
@@ -143,5 +158,33 @@ public class EditTaskActivity extends AppCompatActivity {
     }
 
     public void addStep(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Имя шага");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            //Сохранение введенного текста в диалог, отображение изменений
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                step = new Step(input.getText().toString());
+                DatabaseHelper.db.execSQL("INSERT INTO stepList (" + DatabaseHelper.COLUMN_NAME + ") VALUES ('" + step.getTitle() + "');");
+                StepDbMethods.showStepLists(EditTaskActivity.this, EditTaskActivity.this);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
     }
 }
