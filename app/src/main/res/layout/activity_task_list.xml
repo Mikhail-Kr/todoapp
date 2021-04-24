@@ -8,6 +8,21 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".views.TaskListActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginBottom="0dp"
+        android:text="Задачи"
+        android:textSize="25dp" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
@@ -19,6 +34,7 @@
         android:clickable="true"
         android:onClick="onClick"
         app:srcCompat="@android:drawable/ic_input_add" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
@@ -35,7 +51,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
     </androidx.recyclerview.widget.RecyclerView>
-
 </RelativeLayout>
