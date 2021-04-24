@@ -18,6 +18,7 @@ import java.util.Random;
 
 import android.widget.Toast;
 
+import com.example.todoapp.dbClasses.EditTaskDbMethods;
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.R;
 import com.example.todoapp.models.Pictures;
@@ -26,7 +27,6 @@ import com.example.todoapp.models.Task;
 public class EditTaskActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    public final String APP_TAG = "ToDoApp";
     public String photoFileName = RandomString();
     Uri selectedImage;
 
@@ -47,13 +47,8 @@ public class EditTaskActivity extends AppCompatActivity {
         Uri picPath = selectedImage;
         String picName = photoFileName;
         Task task = new Task(name, disc, picPath, picName);
-        DatabaseHelper.db.execSQL("INSERT INTO tasks (" + DatabaseHelper.COLUMN_NAME + ", "
-                + DatabaseHelper.COLUMN_DISC + " , " + DatabaseHelper.COLUMN_PICS_PATH + " , "
-                + DatabaseHelper.COLUMN_PICS_NAME + ") VALUES ('" + task.getName() + "', '"
-                + task.getDisc() + "', '" + task.getPicPath() + "', '"+ task.getPicName() +"' );");
-
-        Intent intent = new Intent(this, TaskListActivity.class);
-        startActivity(intent);
+        EditTaskDbMethods.insert(task);
+        Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();
     }

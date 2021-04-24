@@ -1,6 +1,7 @@
 package com.example.todoapp.views;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(StepAdapter.ViewHolder holder, int position) {
         Step step = steps.get(position);
-        holder.stepView.setText(step.getStep());
+        holder.stepView.setText(step.getTitle());
     }
 
     @Override
@@ -38,31 +39,12 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
         return steps.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView stepView;
 
         ViewHolder(View view) {
             super(view);
-            view.setOnClickListener(this);
             stepView = view.findViewById(R.id.step_list);
-        }
-
-        @Override
-        public void onClick(View view) {
-            Toast.makeText(view.getContext(), "position = " + getLayoutPosition(), Toast.LENGTH_SHORT).show();
-            //go through each item if you have few items within recycler view
-            if (getLayoutPosition() == 0) {
-                //Do whatever you want here
-            } else if (getLayoutPosition() == 1) {
-                //Do whatever you want here
-            } else if (getLayoutPosition() == 2) {
-            } else if (getLayoutPosition() == 3) {
-            } else if (getLayoutPosition() == 4) {
-            } else if (getLayoutPosition() == 5) {
-            }
-            //or you can use For loop if you have long list of items. Use its length or size of the list as
-            for (int i = 0; i < steps.size(); i++) {
-            }
         }
     }
 }

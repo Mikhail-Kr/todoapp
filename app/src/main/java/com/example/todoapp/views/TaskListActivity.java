@@ -11,13 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.todoapp.R;
+import com.example.todoapp.dbClasses.TaskListDbMethods;
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.models.Task;
 
 import java.util.ArrayList;
 
 public class TaskListActivity extends AppCompatActivity {
-    Cursor taskCursor;
+
     String[] data;
 
     @Override
@@ -32,19 +33,7 @@ public class TaskListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // открываем подключение
-        ArrayList<Task> tasks = new ArrayList<>();
-        //DatabaseHelper.db = DatabaseHelper.databaseHelper.getReadableDatabase();
-        //получаем данные из бд в виде курсора
-        taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE, data);
-        if (taskCursor != null) {
-            while (taskCursor.moveToNext()) {
-                tasks.add(DatabaseHelper.addTask(taskCursor));
-                RecyclerView recyclerView = findViewById(R.id.list);
-                TaskListAdapter taskListAdapter = new TaskListAdapter(this, tasks);
-                recyclerView.setAdapter(taskListAdapter);
-            }
-        }
+        TaskListDbMethods.ShowTaskList(this, this);
     }
 
     @Override
