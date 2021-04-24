@@ -20,9 +20,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_DISC = "disc";
     public static final String COLUMN_PICS_PATH = "picsPath";
-    public static final String COLUMN_PICS_NAME = "picsName";
     public static final String COLUMN_STATUS = "finished";
-    public static final String COLUMN_ID_GROUP = "id_group";
+    public static final String COLUMN_ID_GROUP = "idgroup";
     public static SQLiteDatabase db;
     public static DatabaseHelper databaseHelper;
 
@@ -33,23 +32,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE "+ TABLE_LIST +" ("
+                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_NAME + " TEXT);");
+
         db.execSQL("CREATE TABLE "+ TABLE +" ("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_NAME + " TEXT,"
                 + COLUMN_DISC + " TEXT,"
                 + COLUMN_PICS_PATH + " TEXT,"
-                + COLUMN_PICS_NAME + " TEXT);");
+                + COLUMN_STATUS + " INTEGER,"
+                + COLUMN_ID_GROUP + " INTEGER,"
+                + " FOREIGN KEY (" + COLUMN_ID_GROUP + ") REFERENCES "+ TABLE_LIST +"(" + COLUMN_ID + ") ON DELETE SET NULL )");
 
-        db.execSQL("CREATE TABLE taskLists ("
-                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COLUMN_NAME + " TEXT);");
-
-        db.execSQL("CREATE TABLE stepList ("
+        db.execSQL("CREATE TABLE "+ TABLE_STEP_LIST +" ("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_NAME + " TEXT,"
                 + COLUMN_STATUS + " INTEGER,"
                 + COLUMN_ID_GROUP + " INTEGER,"
-                + " FOREIGN KEY ("+COLUMN_ID_GROUP+") REFERENCES "+TABLE+"("+COLUMN_ID_GROUP+"))");
+                + " FOREIGN KEY (" + COLUMN_ID + ") REFERENCES "+ TABLE +"(" + COLUMN_ID + "))");
     }
 
     @Override

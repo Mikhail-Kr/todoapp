@@ -5,13 +5,14 @@ import android.net.Uri;
 import java.io.Serializable;
 
 
-public class Task implements Serializable {
+public class Task {
     private final String name;
     private final String disc;
     private final Uri picPath;
-    private final String picName;
+    private final int finished;
+    private final int foreignKey;
 
-    public Task(String name, String disc, Uri pic, String picName) {
+    public Task(String name, String disc, Uri pic, int finished, int foreignKey) {
         if (name.length() >= 20) {
             throw new IllegalArgumentException();
         } else {
@@ -24,7 +25,8 @@ public class Task implements Serializable {
             this.disc = disc;
         }
         this.picPath = pic;
-        this.picName = picName;
+        this.finished = finished;
+        this.foreignKey = foreignKey;
     }
 
     public String getName() {
@@ -37,5 +39,9 @@ public class Task implements Serializable {
 
     public Uri getPicPath() { return picPath; }
 
-    public String getPicName() { return picName; }
+    public int getStatus() { return finished; }
+
+    public int getForeignKey() {
+        return foreignKey;
+    }
 }

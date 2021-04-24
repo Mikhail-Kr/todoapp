@@ -10,25 +10,33 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Random;
 
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.todoapp.dbClasses.EditTaskDbMethods;
-import com.example.todoapp.models.DatabaseHelper;
+import com.example.todoapp.dbClasses.TaskListsDbMethods;
 import com.example.todoapp.R;
 import com.example.todoapp.models.Pictures;
 import com.example.todoapp.models.Task;
+import com.example.todoapp.models.TaskList;
 
 public class EditTaskActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = RandomString();
     Uri selectedImage;
+    String[] lists = TaskListsDbMethods.selectTaskListsName();
+    String item;
+    ArrayList<TaskList> taskList = TaskListsDbMethods.select();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +45,24 @@ public class EditTaskActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lists);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Получаем выбранный объект
+                item = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        };
+        spinner.setOnItemSelectedListener(itemSelectedListener);
     }
 
     public void onClick(View view) {
@@ -45,8 +71,13 @@ public class EditTaskActivity extends AppCompatActivity {
         EditText content2 = findViewById(R.id.message);
         String disc = content2.getText().toString();
         Uri picPath = selectedImage;
-        String picName = photoFileName;
-        Task task = new Task(name, disc, picPath, picName);
+        int foreignKey = 0;
+        for (int i = 0; i < taskList.size(); i++) {
+            if (taskList.get(i).toString().equals(item)) {
+                foreignKey = taskList.get(i).getForeingKey();
+            }
+        }
+        Task task = new Task(name, disc, picPath, 0, foreignKey);
         EditTaskDbMethods.insert(task);
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);

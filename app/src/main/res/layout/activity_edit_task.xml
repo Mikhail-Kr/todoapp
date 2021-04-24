@@ -6,32 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".views.EditTaskActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_marginEnd="9dp"
-        android:background="#ffebee"
-        android:fontFamily="sans-serif"
-        android:text="Я хочу ...."
-        android:textAlignment="center"
-        android:textColor="#f44336"
-        android:textSize="26sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/list_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Например, выйти на пробежку"
+        android:hint="Введите заголовок задачи"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/printedPic" />
 
     <EditText
         android:id="@+id/message"
@@ -40,7 +23,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         android:gravity="top"
-        android:hint="Дополни задачу, например, пробежать по парку"
+        android:hint="Введите описание задачи"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -51,6 +34,7 @@
         android:id="@+id/button"
         android:layout_width="125dp"
         android:layout_height="55dp"
+        android:layout_marginTop="50dp"
         android:onClick="onClick"
         android:text="Сохранить"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,44 +46,47 @@
         android:id="@+id/addPic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="76dp"
+        android:layout_marginStart="10dp"
         android:onClick="onClick_Image"
-        android:text="Загрузить изображение"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.834"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="Галерея"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 
     <Button
         android:id="@+id/addCam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginStart="10dp"
         android:onClick="onClick_Cam"
-        android:text="Сделать фото"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.692"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="Фото"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addPic" />
 
     <ImageView
         android:id="@+id/printedPic"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/addPic"
+        android:layout_width="390dp"
+        android:layout_height="390dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/addStep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="16dp"
         android:onClick="addStep"
         android:text="Добавить шаги"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/message"
+        tools:layout_editor_absoluteX="43dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
