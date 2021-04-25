@@ -32,7 +32,7 @@
         android:layout_marginRight="19dp"
         android:layout_marginBottom="28dp"
         android:clickable="true"
-        android:onClick="onClick"
+        android:onClick="onClickToAddTask"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 

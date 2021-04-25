@@ -4,6 +4,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,22 +13,28 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.todoapp.dbClasses.EditTaskDbMethods;
 import com.example.todoapp.dbClasses.StepDbMethods;
+import com.example.todoapp.dbClasses.TaskListDbMethods;
 import com.example.todoapp.dbClasses.TaskListsDbMethods;
 import com.example.todoapp.R;
 import com.example.todoapp.models.DatabaseHelper;
@@ -42,8 +50,15 @@ public class EditTaskActivity extends AppCompatActivity {
     Uri selectedImage;
     String[] lists = TaskListsDbMethods.selectTaskListsName();
     String item;
-    ArrayList<TaskList> taskList = TaskListsDbMethods.select();
+    ArrayList<TaskList> taskLists = TaskListsDbMethods.select();
+    ArrayList<Task> taskList = TaskListDbMethods.select();
     Step step;
+    ArrayList<Step> steps = new ArrayList<>();
+
+    String result;
+
+    TextView currentDateTime;
+    Calendar dateAndTime = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +67,9 @@ public class EditTaskActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        currentDateTime = (TextView) findViewById(R.id.currentDateTime);
+
+        result = getIntent().getAction();
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lists);
@@ -63,8 +81,6 @@ public class EditTaskActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Получаем выбранный объект
                 item = (String) parent.getItemAtPosition(position);
-
-                StepDbMethods.showStepLists(EditTaskActivity.this, EditTaskActivity.this);
             }
 
             @Override
@@ -77,23 +93,24 @@ public class EditTaskActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        StepDbMethods.showStepLists(this, this);
     }
 
-    public void onClick(View view) {
+    public void onSaveTask(View view) {
         EditText content = findViewById(R.id.list_name);
         String name = content.getText().toString();
         EditText content2 = findViewById(R.id.message);
         String disc = content2.getText().toString();
         Uri picPath = selectedImage;
+        String dateAlarm = currentDateTime.getText().toString();
         int foreignKey = 0;
-        for (int i = 0; i < taskList.size(); i++) {
-            if (taskList.get(i).toString().equals(item)) {
-                foreignKey = taskList.get(i).getForeingKey();
+        for (int i = 0; i < taskLists.size(); i++) {
+            if (taskLists.get(i).toString().equals(item)) {
+                foreignKey = taskLists.get(i).getForeingKey();
             }
         }
-        Task task = new Task(name, disc, picPath, 0, foreignKey);
-        EditTaskDbMethods.insert(task);
+        Task task = new Task(name, disc, picPath, 0, dateAlarm, foreignKey);
+        EditTaskDbMethods.insertTask(task);
+        StepDbMethods.insertSteps(steps);
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();
@@ -173,9 +190,15 @@ public class EditTaskActivity extends AppCompatActivity {
             //Сохранение введенного текста в диалог, отображение изменений
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                step = new Step(input.getText().toString());
-                DatabaseHelper.db.execSQL("INSERT INTO stepList (" + DatabaseHelper.COLUMN_NAME + ") VALUES ('" + step.getTitle() + "');");
-                StepDbMethods.showStepLists(EditTaskActivity.this, EditTaskActivity.this);
+                int foreignKey = 0;
+                if (taskList.size() == 0) {
+                    foreignKey = 1;
+                } else {
+                    foreignKey = taskList.size() + 1;
+                }
+                step = new Step(input.getText().toString(), 0, foreignKey);
+                steps.add(step);
+                StepDbMethods.showStepListsArray(steps, EditTaskActivity.this, EditTaskActivity.this);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -187,4 +210,47 @@ public class EditTaskActivity extends AppCompatActivity {
         builder.show();
 
     }
+
+    public void addDate(View view) {
+        new DatePickerDialog(this, d,
+                dateAndTime.get(Calendar.YEAR),
+                dateAndTime.get(Calendar.MONTH),
+                dateAndTime.get(Calendar.DAY_OF_MONTH))
+                .show();
+    }
+
+    public void addTime(View view) {
+        new TimePickerDialog(this, t,
+                dateAndTime.get(Calendar.HOUR_OF_DAY),
+                dateAndTime.get(Calendar.MINUTE), true)
+                .show();
+    }
+
+    // установка начальных даты и времени
+    private void setInitialDateTime() {
+
+        currentDateTime.setText(DateUtils.formatDateTime(this,
+                dateAndTime.getTimeInMillis(),
+                DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
+                        | DateUtils.FORMAT_SHOW_TIME));
+    }
+
+    // установка обработчика выбора времени
+    TimePickerDialog.OnTimeSetListener t = new TimePickerDialog.OnTimeSetListener() {
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            dateAndTime.set(Calendar.MINUTE, minute);
+            setInitialDateTime();
+        }
+    };
+
+    // установка обработчика выбора даты
+    DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            dateAndTime.set(Calendar.YEAR, year);
+            dateAndTime.set(Calendar.MONTH, monthOfYear);
+            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            setInitialDateTime();
+        }
+    };
 }

@@ -10,7 +10,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.todoapp.dbClasses.StepDbMethods;
+
 import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.R;
 import com.example.todoapp.dbClasses.TaskListsDbMethods;
@@ -18,6 +18,7 @@ import com.example.todoapp.models.TaskList;
 
 public class MainActivity extends AppCompatActivity {
     TaskList tasklist;
+    protected static final String ACTION_DO_MAIN = "main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +78,10 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+    //переход к EditTaskActivity
     public void onClickToAddTask(View view) {
         Intent intent = new Intent(this, EditTaskActivity.class);
+        intent.setAction(ACTION_DO_MAIN);
         startActivityForResult(intent, 1);
     }
 

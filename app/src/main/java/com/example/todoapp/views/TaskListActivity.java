@@ -44,7 +44,7 @@ public class TaskListActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onClick(View view) {
+    public void onClickToAddTask(View view) {
         Intent intent = new Intent(this, EditTaskActivity.class);
         startActivityForResult(intent, 1);
     }
