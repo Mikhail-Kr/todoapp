@@ -32,6 +32,17 @@ public class TaskListDbMethods {
         return tasks;
     }
 
+    public static int selectFK(String name) {
+        ArrayList<Task> tasks = select();
+        int fK = 1034;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks != null && tasks.get(i).getName().equals(name)) {
+                fK = tasks.get(i).getForeignKey();
+            }
+        }
+        return fK;
+    }
+
     public static Task addTask(Cursor taskCursor) {
         return new Task(
                 taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID)),

@@ -71,6 +71,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
         result = getIntent().getAction();
 
+        // отрисовка спинера
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lists);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -88,12 +89,13 @@ public class EditTaskActivity extends AppCompatActivity {
             }
         };
         spinner.setOnItemSelectedListener(itemSelectedListener);
+        //конец отрисоки спинера
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (result != null && !result.equals("main")) {
+        if (result != null && !result.equals("main") && !result.equals("taskList")) {
             for (int i = 0; i < taskList.size(); i++) {
                 if (taskList.get(i).getName().equals(result)) {
                     task = taskList.get(i);
@@ -107,11 +109,36 @@ public class EditTaskActivity extends AppCompatActivity {
             Uri uri = task.getPicPath();
             ImageView imageView = findViewById(R.id.printedPic);
             imageView.setImageURI(uri);
+
+
+
+            String[] lists = TaskListsDbMethods.getNameFromPK(TaskListDbMethods.selectFK(result));
+            //отрисовка спинера с заданным именем
+            Spinner spinner = (Spinner) findViewById(R.id.spinner);
+            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lists);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+
+            AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    // Получаем выбранный объект
+                    item = (String) parent.getItemAtPosition(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            };
+            spinner.setOnItemSelectedListener(itemSelectedListener);
+            //конец отрисовки спинера
         }
     }
 
     public void onSaveTask(View view) {
-        if (result.equals("main")) {
+        String actionMain = "main";
+        String actionTaskList = "taskList";
+        if (result.equals(actionMain) || result.equals(actionTaskList)) {
             EditText content = findViewById(R.id.list_name);
             String name = content.getText().toString();
             EditText content2 = findViewById(R.id.message);
@@ -127,6 +154,7 @@ public class EditTaskActivity extends AppCompatActivity {
             Task task = new Task(name, disc, picPath, 0, dateAlarm, foreignKey);
             EditTaskDbMethods.insertTask(task);
             StepDbMethods.insertSteps(steps);
+
             Intent intent = new Intent();
             setResult(RESULT_OK, intent);
             finish();
@@ -180,9 +208,12 @@ public class EditTaskActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent(this, TaskListActivity.class);
-        startActivity(intent);
-        setResult(RESULT_OK, intent);
-        finish();
+        if(result == "taskList" || result == "main") {
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            startActivity(intent);
+        }
         return true;
     }
 

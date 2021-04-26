@@ -11,7 +11,6 @@ import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.models.TaskList;
 import com.example.todoapp.views.TaskListsAdapter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class TaskListsDbMethods {
@@ -30,11 +29,11 @@ public class TaskListsDbMethods {
 
     public static String[] selectTaskListsName() {
         ArrayList<TaskList> tasks = select();
-        String[] tasksName = new String[tasks.size()+1];
+        String[] tasksName = new String[tasks.size() + 1];
 
         tasksName[0] = "без списка";
         for (int i = 1; i <= tasks.size(); i++) {
-            tasksName[i] = tasks.get(i-1).toString();
+            tasksName[i] = tasks.get(i - 1).toString();
         }
         return tasksName;
     }
@@ -52,5 +51,24 @@ public class TaskListsDbMethods {
         TaskListsAdapter taskListsAdapter = new TaskListsAdapter(context, tasks);
         recyclerView.setAdapter(taskListsAdapter);
         taskListsAdapter.notifyDataSetChanged();
+    }
+
+    public static String[] getNameFromPK(int pK) {
+
+        Cursor taskCursor;
+        ArrayList<TaskList> tasks = new ArrayList<>();
+        taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE_LIST, null);
+        if (taskCursor != null) {
+            while (taskCursor.moveToNext()) {
+                if (taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID)) == pK) {
+                    tasks.add(addTaskList(taskCursor));
+                }
+            }
+        }
+        if (pK != 1034 && pK != 0) {
+            return new String[] {tasks.get(0).getName()};
+        } else {
+            return null;
+        }
     }
 }

@@ -37,12 +37,17 @@ public class StepDbMethods {
     public static void showStepLists(Context context, Activity activity, int pK) {
         ArrayList<Step> step = select();
         ArrayList<Step> stepsForPr = new ArrayList<>();
+        RecyclerView recyclerView;
         for (int i = 0; i < step.size(); i++) {
             if (step != null && (step.get(i).getForeignKey() == pK)) {
                 stepsForPr.add(step.get(i));
             }
         }
-        RecyclerView recyclerView = activity.findViewById(R.id.stepslist);
+        if (activity.getClass().getSimpleName().equals("EditTaskActivity")) {
+            recyclerView = activity.findViewById(R.id.stepslist);
+        } else {
+            recyclerView = activity.findViewById(R.id.step_list1);
+        }
         StepAdapter stepAdapter = new StepAdapter(context, stepsForPr);
         if (stepsForPr != null) {
             recyclerView.setAdapter(stepAdapter);

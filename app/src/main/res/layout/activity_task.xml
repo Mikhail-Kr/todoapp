@@ -59,7 +59,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginBottom="394dp"
+        android:layout_marginBottom="304dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -76,7 +76,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="89dp"
         android:layout_marginBottom="111dp"
-        android:text="Редакитровать задачу" />
+        android:text="Редакитровать задачу"
+        android:onClick="onClickEditTask"/>
 
     <Button
         android:id="@+id/delete_task"
@@ -86,6 +87,15 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="122dp"
         android:layout_marginBottom="28dp"
-        android:text="Удалить задачу" />
+        android:text="Удалить задачу"
+        android:onClick="onClickDelTask"/>
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp" />
 
 </RelativeLayout>

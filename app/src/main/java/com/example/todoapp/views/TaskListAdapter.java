@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
 import com.example.todoapp.models.Task;
+import com.example.todoapp.models.TaskList;
 
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 ct.toggle();
             });
             discView.setOnClickListener(v -> {
-                Intent intent = new Intent(context1, EditTaskActivity.class);
+                Intent intent = new Intent(context1, TaskActivity.class);
                 intent.setAction(nameView.getText().toString());
                 context1.startActivity(intent);
             });

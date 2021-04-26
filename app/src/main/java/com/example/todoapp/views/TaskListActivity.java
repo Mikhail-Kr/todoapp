@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class TaskListActivity extends AppCompatActivity {
 
-    String[] data;
+    int result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class TaskListActivity extends AppCompatActivity {
     }
 
     public void onClickToAddTask(View view) {
-        Intent intent = new Intent(this, EditTaskActivity.class);
+        Intent intent = new Intent("taskList",null,this, EditTaskActivity.class);
         startActivityForResult(intent, 1);
     }
 
