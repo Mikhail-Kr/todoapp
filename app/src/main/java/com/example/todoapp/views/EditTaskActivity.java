@@ -163,7 +163,17 @@ public class EditTaskActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent);
             finish();
         } else {
-            //написать метод UpdateDB
+            EditText content = findViewById(R.id.list_name);
+            String name = content.getText().toString();
+            EditText content2 = findViewById(R.id.message);
+            String disc = content2.getText().toString();
+            Uri picPath = selectedImage;
+            String dateAlarm = currentDateTime.getText().toString();
+            EditTaskDbMethods.editTask(name, disc, picPath, dateAlarm);
+            StepDbMethods.insertSteps(steps);
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
         }
     }
 
