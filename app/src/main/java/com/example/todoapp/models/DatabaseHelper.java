@@ -67,17 +67,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return databaseHelper;
     }
 
-    /** Конструктор класса DatabaseHelper.
-     * @param context*/
-    public DatabaseHelper(final Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, SCHEMA);
     }
 
 
-    /** Метод класса DatabaseHelper.
-     * @param dB*/
+
     @Override
-    public void onCreate(SQLiteDatabase dB) {
+    public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE "+ TABLE_LIST +" ("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_NAME + " TEXT);");
@@ -101,8 +98,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(final SQLiteDatabase dB,
-                          final int oldVersion,
-                          final int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 }
