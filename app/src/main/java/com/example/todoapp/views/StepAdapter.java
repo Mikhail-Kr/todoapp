@@ -46,9 +46,6 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     public StepAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.step_list_item, parent, false);
         TextView stepView = view.findViewById(R.id.title_step);
-        if (StepDbMethods.checkFinished(stepView.getText().toString()) == true) {
-            stepView.setPaintFlags(stepView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        }
         return new ViewHolder(view);
     }
 
@@ -77,7 +74,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
             delText = view.findViewById(R.id.delText);
             finText = view.findViewById(R.id.finished);
             delText.setOnClickListener(v -> {
-                Toast.makeText(view.getContext(), stepView.getText().toString(), Toast.LENGTH_SHORT).show();
+                //StepDbMethods.delStep(stepView.getText().toString());
             });
             finText.setOnClickListener(v -> {
                 StepDbMethods.setFinished(stepView.getText().toString());

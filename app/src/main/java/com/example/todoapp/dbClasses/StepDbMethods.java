@@ -108,4 +108,18 @@ public class StepDbMethods {
         }
         return check;
     }
+
+    public static void delStep(String name) {
+        int delId = 1;
+        Cursor taskCursor;
+        taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE_STEP_LIST, null);
+        if (taskCursor != null) {
+            while (taskCursor.moveToNext()) {
+                if(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME)) == name) {
+                    delId = taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID)) ;
+                }
+            }
+        }
+        int delCount = DatabaseHelper.db.delete(DatabaseHelper.TABLE_STEP_LIST, DatabaseHelper.COLUMN_ID + "=" + delId, null);
+    }
 }

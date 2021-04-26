@@ -115,17 +115,16 @@ public class TaskListDbMethods {
     }
 
     public static void delTask(String name) {
-        int delId = 0;
+        int delId = 1;
         Cursor taskCursor;
         taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE, null);
         if (taskCursor != null) {
             while (taskCursor.moveToNext()) {
-                if(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME)) == name) {
-                    delId = taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID)) ;
+                if(name.equals(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME)))) {
+                    delId = taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
                 }
             }
         }
-        delId =+ 1;
         int delCount = DatabaseHelper.db.delete(DatabaseHelper.TABLE, DatabaseHelper.COLUMN_ID + "=" + delId, null);
     }
 }
