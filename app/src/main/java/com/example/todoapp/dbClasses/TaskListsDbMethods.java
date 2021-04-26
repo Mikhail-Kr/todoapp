@@ -1,13 +1,16 @@
 package com.example.todoapp.dbClasses;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
 import com.example.todoapp.models.DatabaseHelper;
+import com.example.todoapp.models.Task;
 import com.example.todoapp.models.TaskList;
 import com.example.todoapp.views.TaskListsAdapter;
 
@@ -70,5 +73,22 @@ public class TaskListsDbMethods {
         } else {
             return null;
         }
+    }
+
+    public static void editTaskListName(String newName, int newNameId) {
+        Cursor taskCursor;
+        String name = null;
+        taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE_LIST, null);
+        if (taskCursor != null) {
+            while (taskCursor.moveToNext()) {
+                if (taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID)) == (newNameId+1)) {
+                    name = (taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME)));
+                }
+            }
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("name", newName);
+        int updCount = DatabaseHelper.db.update(DatabaseHelper.TABLE_LIST, cv, "name = ?",
+                new String[] {name});
     }
 }
