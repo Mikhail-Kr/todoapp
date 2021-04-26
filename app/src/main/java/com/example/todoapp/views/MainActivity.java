@@ -93,4 +93,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
     }
+
+    public void onClickToPlanTask(View view) {
+        Intent intent = new Intent(this, PlannedActivity.class);
+        startActivityForResult(intent, 1);
+    }
 }

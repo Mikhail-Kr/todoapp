@@ -142,7 +142,8 @@ public class EditTaskActivity extends AppCompatActivity {
     public void onSaveTask(View view) {
         String actionMain = "main";
         String actionTaskList = "taskList";
-        if (result.equals(actionMain) || result.equals(actionTaskList)) {
+        String actionPlanList = "planned";
+        if (result.equals(actionMain) || result.equals(actionTaskList) || result.equals(actionPlanList)) {
             EditText content = findViewById(R.id.list_name);
             String name = content.getText().toString();
             EditText content2 = findViewById(R.id.message);
