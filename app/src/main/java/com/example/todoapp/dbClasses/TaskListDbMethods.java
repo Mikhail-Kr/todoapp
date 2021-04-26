@@ -54,7 +54,7 @@ public class TaskListDbMethods {
         if (taskCursor != null) {
             result = activity.getIntent().getAction();
             int result1;
-            if (result != null) {
+            if (result != null && result.equals("main")) {
                 result1 = Integer.valueOf(result) + 1;
             } else {
                 result1 = 0;

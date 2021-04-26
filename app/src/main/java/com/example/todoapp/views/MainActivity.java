@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     //Переход к списку задач
     public void onClickToTaskList(View view) {
         Intent intent = new Intent(this, TaskListActivity.class);
+        intent.setAction("main");
         startActivityForResult(intent, 1);
     }
 
