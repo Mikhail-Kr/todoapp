@@ -41,9 +41,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="650dp"
+        android:layout_marginTop="600dp"
         android:onClick="onClickRenameList"
         android:text="Переименовать список" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="660dp"
+        android:onClick="onClickDelList"
+        android:text="Удалить список" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"

@@ -100,5 +100,9 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     public void onClickDelTask(View view) {
+        TextView tv = this.findViewById(R.id.task_name);
+        TaskListDbMethods.delTask(tv.getText().toString());
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

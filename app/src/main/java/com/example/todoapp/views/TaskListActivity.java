@@ -92,4 +92,10 @@ public class TaskListActivity extends AppCompatActivity {
         });
         builder.show();
     }
+
+    public void onClickDelList(View view) {
+        TaskListsDbMethods.delTaskListName(result);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 }

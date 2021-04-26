@@ -87,14 +87,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_DATE_ALARM + " TEXT,"
                 + COLUMN_STATUS + " INTEGER,"
                 + COLUMN_ID_GROUP + " INTEGER,"
-                + " FOREIGN KEY (" + COLUMN_ID_GROUP + ") REFERENCES "+ TABLE_LIST +"(" + COLUMN_ID + ") ON DELETE SET NULL )");
+                + " FOREIGN KEY (" + COLUMN_ID_GROUP + ") REFERENCES "+ TABLE_LIST +"(" + COLUMN_ID + ") ON DELETE CASCADE )");
 
         db.execSQL("CREATE TABLE "+ TABLE_STEP_LIST +" ("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_NAME + " TEXT,"
                 + COLUMN_STATUS + " INTEGER,"
                 + COLUMN_ID_GROUP + " INTEGER,"
-                + " FOREIGN KEY (" + COLUMN_ID + ") REFERENCES "+ TABLE +"(" + COLUMN_ID + "))");
+                + " FOREIGN KEY (" + COLUMN_ID + ") REFERENCES "+ TABLE +"(" + COLUMN_ID + ") ON DELETE CASCADE )");
     }
 
     @Override

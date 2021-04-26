@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.renderscript.Sampler;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -90,5 +91,10 @@ public class TaskListsDbMethods {
         cv.put("name", newName);
         int updCount = DatabaseHelper.db.update(DatabaseHelper.TABLE_LIST, cv, "name = ?",
                 new String[] {name});
+    }
+
+    public static void delTaskListName(int id) {
+        int delId = id + 1;
+        int delCount = DatabaseHelper.db.delete(DatabaseHelper.TABLE_LIST, DatabaseHelper.COLUMN_ID + "=" + delId, null);
     }
 }
