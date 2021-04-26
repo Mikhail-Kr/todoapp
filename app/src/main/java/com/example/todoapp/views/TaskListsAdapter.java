@@ -49,7 +49,8 @@ public class TaskListsAdapter extends RecyclerView.Adapter<TaskListsAdapter.View
             super(view);
             nameView = view.findViewById(R.id.title);
             nameView.setOnClickListener(v -> {
-                Intent intent = new Intent(context1, TaskActivity.class);
+                Intent intent = new Intent(context1, TaskListActivity.class);
+                intent.setAction(String.valueOf(getLayoutPosition()));
                 context1.startActivity(intent);
             });
         }

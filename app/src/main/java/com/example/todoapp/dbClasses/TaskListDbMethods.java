@@ -12,10 +12,13 @@ import com.example.todoapp.models.DatabaseHelper;
 import com.example.todoapp.models.Task;
 import com.example.todoapp.models.TaskList;
 import com.example.todoapp.views.TaskListAdapter;
+import com.example.todoapp.views.TaskListsAdapter;
 
 import java.util.ArrayList;
 
 public class TaskListDbMethods {
+
+    String result;
 
     public static ArrayList<Task> select() {
         Cursor taskCursor;
@@ -41,16 +44,23 @@ public class TaskListDbMethods {
     }
 
     public static void ShowTaskList(Context context, Activity activity) {
+        String result = activity.getIntent().getAction();
         Cursor taskCursor;
         // открываем подключение
         ArrayList<Task> tasks = new ArrayList<>();
-        //DatabaseHelper.db = DatabaseHelper.databaseHelper.getReadableDatabase();
         //получаем данные из бд в виде курсора
         taskCursor = DatabaseHelper.db.rawQuery(" select * from " + DatabaseHelper.TABLE, null);
 
         if (taskCursor != null) {
+            result = activity.getIntent().getAction();
+            int result1;
+            if (result != null) {
+                result1 = Integer.valueOf(result) + 1;
+            } else {
+                result1 = 0;
+            }
             while (taskCursor.moveToNext()) {
-                if (taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID_GROUP)) == 0) {
+                if (taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID_GROUP)) == result1) {
                     tasks.add(addTask(taskCursor));
                     RecyclerView recyclerView = activity.findViewById(R.id.list);
                     TaskListAdapter taskListAdapter = new TaskListAdapter(context, tasks);
@@ -58,6 +68,5 @@ public class TaskListDbMethods {
                 }
             }
         }
-
     }
 }
