@@ -1,6 +1,7 @@
 package com.example.todoapp.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,12 @@ import java.util.List;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
     private static List<Task> tasks;
+    private static Context context1;
+    private static Task task;
 
     public TaskListAdapter(Context context, List<Task> task) {
         this.tasks = task;
+        context1 = context;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(TaskListAdapter.ViewHolder holder, int position) {
-        Task task = tasks.get(position);
+        task = tasks.get(position);
         holder.picView.setImageURI(task.getPicPath());
         holder.nameView.setText(task.getName());
         holder.discView.setText(task.getDisc());
@@ -57,7 +61,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 ct.toggle();
             });
             discView.setOnClickListener(v -> {
-                Toast.makeText(view.getContext(), nameView.getText().toString(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context1, EditTaskActivity.class);
+                intent.setAction(nameView.getText().toString());
+                context1.startActivity(intent);
             });
         }
     }

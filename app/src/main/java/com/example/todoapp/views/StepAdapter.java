@@ -20,8 +20,10 @@ import java.util.List;
 
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     private static List<Step> steps;
+    Context context1;
 
     public StepAdapter(Context context, List<Step> steps) {
+        Context context1 = context;
         this.steps = steps;
     }
 

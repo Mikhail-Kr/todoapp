@@ -30,16 +30,24 @@ public class StepDbMethods {
     public static Step addStepList(Cursor taskCursor) {
         return new Step(taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_NAME)),
                 taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_STATUS)),
-                taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID)));
+                taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID_GROUP)));
     }
 
     //отображение Step из БД
-    public static void showStepLists(Context context, Activity activity) {
+    public static void showStepLists(Context context, Activity activity, int pK) {
         ArrayList<Step> step = select();
+        ArrayList<Step> stepsForPr = new ArrayList<>();
+        for (int i = 0; i < step.size(); i++) {
+            if (step != null && (step.get(i).getForeignKey() == pK)) {
+                stepsForPr.add(step.get(i));
+            }
+        }
         RecyclerView recyclerView = activity.findViewById(R.id.stepslist);
-        StepAdapter stepAdapter = new StepAdapter(context, step);
-        recyclerView.setAdapter(stepAdapter);
-        stepAdapter.notifyDataSetChanged();
+        StepAdapter stepAdapter = new StepAdapter(context, stepsForPr);
+        if (stepsForPr != null) {
+            recyclerView.setAdapter(stepAdapter);
+            stepAdapter.notifyDataSetChanged();
+        }
     }
 
     //отображение Step из ArrayList

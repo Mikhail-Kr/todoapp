@@ -54,7 +54,7 @@ public class EditTaskActivity extends AppCompatActivity {
     ArrayList<Task> taskList = TaskListDbMethods.select();
     Step step;
     ArrayList<Step> steps = new ArrayList<>();
-
+    Task task;
     String result;
 
     TextView currentDateTime;
@@ -93,27 +93,46 @@ public class EditTaskActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (result != null && !result.equals("main")) {
+            for (int i = 0; i < taskList.size(); i++) {
+                if (taskList.get(i).getName().equals(result)) {
+                    task = taskList.get(i);
+                }
+            }
+            EditText content = findViewById(R.id.list_name);
+            content.setText(task.getName());
+            EditText content2 = findViewById(R.id.message);
+            content2.setText(task.getDisc());
+            StepDbMethods.showStepLists(this, this, task.getPrimaryKey());
+            Uri uri = task.getPicPath();
+            ImageView imageView = findViewById(R.id.printedPic);
+            imageView.setImageURI(uri);
+        }
     }
 
     public void onSaveTask(View view) {
-        EditText content = findViewById(R.id.list_name);
-        String name = content.getText().toString();
-        EditText content2 = findViewById(R.id.message);
-        String disc = content2.getText().toString();
-        Uri picPath = selectedImage;
-        String dateAlarm = currentDateTime.getText().toString();
-        int foreignKey = 0;
-        for (int i = 0; i < taskLists.size(); i++) {
-            if (taskLists.get(i).toString().equals(item)) {
-                foreignKey = taskLists.get(i).getForeingKey();
+        if (result.equals("main")) {
+            EditText content = findViewById(R.id.list_name);
+            String name = content.getText().toString();
+            EditText content2 = findViewById(R.id.message);
+            String disc = content2.getText().toString();
+            Uri picPath = selectedImage;
+            String dateAlarm = currentDateTime.getText().toString();
+            int foreignKey = 0;
+            for (int i = 0; i < taskLists.size(); i++) {
+                if (taskLists.get(i).toString().equals(item)) {
+                    foreignKey = taskLists.get(i).getForeingKey();
+                }
             }
+            Task task = new Task(name, disc, picPath, 0, dateAlarm, foreignKey);
+            EditTaskDbMethods.insertTask(task);
+            StepDbMethods.insertSteps(steps);
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            //написать метод UpdateDB
         }
-        Task task = new Task(name, disc, picPath, 0, dateAlarm, foreignKey);
-        EditTaskDbMethods.insertTask(task);
-        StepDbMethods.insertSteps(steps);
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-        finish();
     }
 
     public void onClick_Image(View view) {
