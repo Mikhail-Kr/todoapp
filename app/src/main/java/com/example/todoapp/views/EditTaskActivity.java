@@ -96,42 +96,46 @@ public class EditTaskActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (result != null && !result.equals("main") && !result.equals("taskList")) {
-            for (int i = 0; i < taskList.size(); i++) {
-                if (taskList.get(i).getName().equals(result)) {
-                    task = taskList.get(i);
+            if (taskList != null) {
+                for (int i = 0; i < taskList.size(); i++) {
+                    if (taskList.get(i).getName().equals(result)) {
+                        task = taskList.get(i);
+                    }
                 }
             }
-            EditText content = findViewById(R.id.list_name);
-            content.setText(task.getName());
-            EditText content2 = findViewById(R.id.message);
-            content2.setText(task.getDisc());
-            StepDbMethods.showStepLists(this, this, task.getPrimaryKey());
-            Uri uri = task.getPicPath();
-            ImageView imageView = findViewById(R.id.printedPic);
-            imageView.setImageURI(uri);
+
+            if (task != null) {
+                EditText content = findViewById(R.id.list_name);
+                content.setText(task.getName());
+                EditText content2 = findViewById(R.id.message);
+                content2.setText(task.getDisc());
+                StepDbMethods.showStepLists(this, this, task.getPrimaryKey());
+                Uri uri = task.getPicPath();
+                ImageView imageView = findViewById(R.id.printedPic);
+                imageView.setImageURI(uri);
 
 
+                String[] lists = TaskListsDbMethods.getNameFromPK(TaskListDbMethods.selectFK(result));
+                //отрисовка спинера с заданным именем
+                Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lists);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapter);
 
-            String[] lists = TaskListsDbMethods.getNameFromPK(TaskListDbMethods.selectFK(result));
-            //отрисовка спинера с заданным именем
-            Spinner spinner = (Spinner) findViewById(R.id.spinner);
-            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lists);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
+                AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        // Получаем выбранный объект
+                        item = (String) parent.getItemAtPosition(position);
+                    }
 
-            AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    // Получаем выбранный объект
-                    item = (String) parent.getItemAtPosition(position);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            };
-            spinner.setOnItemSelectedListener(itemSelectedListener);
-            //конец отрисовки спинера
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                };
+                spinner.setOnItemSelectedListener(itemSelectedListener);
+                //конец отрисовки спинера
+            }
         }
     }
 

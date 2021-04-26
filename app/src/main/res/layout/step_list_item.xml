@@ -5,14 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <CheckedTextView
+    <TextView
         android:id="@+id/title_step"
         android:layout_width="181dp"
         android:layout_height="29dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:checked="false"
         android:text="имя задачи"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -25,6 +23,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Удалить шаг"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_step" />
+
+    <TextView
+        android:id="@+id/finished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:text="Выполнено"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_step" />

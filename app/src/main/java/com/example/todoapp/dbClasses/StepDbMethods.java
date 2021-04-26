@@ -1,8 +1,10 @@
 package com.example.todoapp.dbClasses;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -74,5 +76,36 @@ public class StepDbMethods {
                     + step.getFinished() + "', '"
                     + step.getForeignKey() + "');");
         }
+    }
+
+    public static void setFinished(String name) {
+        ContentValues cv = new ContentValues();
+        cv.put("finished", 1);
+        ArrayList<Step> steps = new ArrayList<>();
+        String title;
+        steps = select();
+        for (int i = 0; i < steps.size(); i++) {
+            if (steps.get(i).equals(name)) {
+                title = steps.get(i).getTitle();
+            }
+        }
+        int updCount = DatabaseHelper.db.update(DatabaseHelper.TABLE_STEP_LIST, cv, "name = ?",
+        new String[] {name});
+    }
+
+    public static boolean checkFinished(String name) {
+        ArrayList<Step> steps;
+        steps = select();
+        boolean check = false;
+        for (int i = 0; i < steps.size(); i++) {
+            if (steps.get(i).getTitle().equals(name)) {
+                if (steps.get(i).getFinished() == 1) {
+                    check = true;
+                } else {
+                    check = false;
+                }
+            }
+        }
+        return check;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.todoapp.dbClasses;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
 import com.example.todoapp.models.DatabaseHelper;
+import com.example.todoapp.models.Step;
 import com.example.todoapp.models.Task;
 import com.example.todoapp.models.TaskList;
 import com.example.todoapp.views.TaskListAdapter;
@@ -79,5 +81,36 @@ public class TaskListDbMethods {
                 }
             }
         }
+    }
+
+    public static boolean checkFinished(String name) {
+        ArrayList<Task> tasks;
+        tasks = select();
+        boolean check = false;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getName().equals(name)) {
+                if (tasks.get(i).getStatus() == 1) {
+                    check = true;
+                } else {
+                    check = false;
+                }
+            }
+        }
+        return check;
+    }
+
+    public static void setFinished(String name) {
+        ContentValues cv = new ContentValues();
+        cv.put("finished", 1);
+        ArrayList<Task> tasks = new ArrayList<>();
+        String title;
+        tasks = select();
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).equals(name)) {
+                title = tasks.get(i).getName();
+            }
+        }
+        int updCount = DatabaseHelper.db.update(DatabaseHelper.TABLE, cv, "name = ?",
+                new String[] {name});
     }
 }
