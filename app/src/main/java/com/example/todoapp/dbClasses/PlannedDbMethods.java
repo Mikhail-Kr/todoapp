@@ -25,7 +25,7 @@ public class PlannedDbMethods {
 
         if (taskCursor != null) {
             while (taskCursor.moveToNext()) {
-                if (taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_ALARM)) != null) {
+                if (taskCursor.getString(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_ALARM)).contains("2021")) {
                     tasks.add(TaskListDbMethods.addTask(taskCursor));
                     RecyclerView recyclerView = activity.findViewById(R.id.listPlan);
                     TaskListAdapter taskListAdapter = new TaskListAdapter(context, tasks);
