@@ -114,8 +114,11 @@ public class EditTaskActivity extends AppCompatActivity {
                 ImageView imageView = findViewById(R.id.printedPic);
                 imageView.setImageURI(uri);
 
-
+                String[] copy = new String[] {"без списка"};
                 String[] lists = TaskListsDbMethods.getNameFromPK(TaskListDbMethods.selectFK(result));
+                if (lists == null) {
+                    lists = copy;
+                }
                 //отрисовка спинера с заданным именем
                 Spinner spinner = (Spinner) findViewById(R.id.spinner);
                 ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lists);
