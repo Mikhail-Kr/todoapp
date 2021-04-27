@@ -35,16 +35,21 @@ public class StepDbMethods {
                 taskCursor.getInt(taskCursor.getColumnIndex(DatabaseHelper.COLUMN_ID_GROUP)));
     }
 
-    //отображение Step из БД
-    public static void showStepLists(Context context, Activity activity, int pK) {
+    public static ArrayList<Step> selectFromDbForPk(int pK) {
         ArrayList<Step> step = select();
         ArrayList<Step> stepsForPr = new ArrayList<>();
-        RecyclerView recyclerView;
         for (int i = 0; i < step.size(); i++) {
             if (step != null && (step.get(i).getForeignKey() == pK)) {
                 stepsForPr.add(step.get(i));
             }
         }
+        return stepsForPr;
+    }
+
+    //отображение Step из БД
+    public static void showStepLists(Context context, Activity activity, int pK) {
+        ArrayList<Step> stepsForPr = selectFromDbForPk(pK);
+        RecyclerView recyclerView;
         if (activity.getClass().getSimpleName().equals("EditTaskActivity")) {
             recyclerView = activity.findViewById(R.id.stepslist);
         } else {

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class TaskActivity extends AppCompatActivity {
     String result;
-    ArrayList<Task> taskList = TaskListDbMethods.select();
+    ArrayList<Task> taskList;
     Task task;
     String item;
 
@@ -37,7 +37,7 @@ public class TaskActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        taskList = TaskListDbMethods.select();
         result = getIntent().getAction();
     }
 

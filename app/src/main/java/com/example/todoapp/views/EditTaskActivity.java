@@ -109,11 +109,12 @@ public class EditTaskActivity extends AppCompatActivity {
                 content.setText(task.getName());
                 EditText content2 = findViewById(R.id.message);
                 content2.setText(task.getDisc());
-                StepDbMethods.showStepLists(this, this, task.getPrimaryKey());
+                steps = StepDbMethods.selectFromDbForPk(task.getPrimaryKey());
+                StepDbMethods.showStepListsArray(steps, this, this);
                 Uri uri = task.getPicPath();
                 ImageView imageView = findViewById(R.id.printedPic);
                 imageView.setImageURI(uri);
-
+                currentDateTime.setText(task.getDateAlarm());
                 String[] copy = new String[] {"без списка"};
                 String[] lists = TaskListsDbMethods.getNameFromPK(TaskListDbMethods.selectFK(result));
                 if (lists == null) {
@@ -151,6 +152,7 @@ public class EditTaskActivity extends AppCompatActivity {
             String name = content.getText().toString();
             EditText content2 = findViewById(R.id.message);
             String disc = content2.getText().toString();
+            selectedImage = task.getPicPath();
             Uri picPath = selectedImage;
             String dateAlarm = currentDateTime.getText().toString();
             int foreignKey = 0;
@@ -171,6 +173,7 @@ public class EditTaskActivity extends AppCompatActivity {
             String name = content.getText().toString();
             EditText content2 = findViewById(R.id.message);
             String disc = content2.getText().toString();
+            selectedImage = task.getPicPath();
             Uri picPath = selectedImage;
             String dateAlarm = currentDateTime.getText().toString();
             EditTaskDbMethods.editTask(name, disc, picPath, dateAlarm);
